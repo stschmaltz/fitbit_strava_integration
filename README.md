@@ -1,4 +1,4 @@
-```markdown
+
 # Fitbit-Strava Integration
 
 This Elixir Phoenix application integrates Fitbit data with Strava, allowing users to sync their Fitbit workouts to their Strava account.
