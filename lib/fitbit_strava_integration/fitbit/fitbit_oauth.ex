@@ -1,4 +1,4 @@
-defmodule FitbitStravaIntegration.FitbitOauth do
+defmodule FitbitStravaIntegration.Fitbit.FitbitOauth do
   @env Dotenv.load()
 
   @fitbit_client_id Dotenv.Env.get(@env, "FITBIT_CLIENT_ID")
@@ -35,7 +35,23 @@ defmodule FitbitStravaIntegration.FitbitOauth do
     )
   end
 
-  def get_token_from_client!(client, params \\ [], headers \\ []) do
+  def get_token_from_client(client, params \\ [], headers \\ []) do
     OAuth2.Client.get_token!(client, params, headers)
+  end
+
+  def refresh_token(refresh_token) do
+    refresh_client =
+      OAuth2.Client.new(
+        strategy: OAuth2.Strategy.Refresh,
+        client_id: @fitbit_client_id,
+        client_secret: @fitbit_client_secret,
+        redirect_uri: @redirect_uri,
+        site: @site,
+        authorize_url: "/oauth2/authorize",
+        token_url: "/oauth2/token",
+        params: %{"refresh_token" => refresh_token}
+      )
+
+    get_token_from_client(refresh_client)
   end
 end
