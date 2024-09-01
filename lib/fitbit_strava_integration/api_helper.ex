@@ -1,6 +1,7 @@
 defmodule FitbitStravaIntegration.ApiHelper do
   use HTTPoison.Base
 
+  @spec process_request_headers(any(), any()) :: nonempty_maybe_improper_list()
   def process_request_headers(headers, token) do
     [{"Authorization", "Bearer #{token}"} | headers]
   end

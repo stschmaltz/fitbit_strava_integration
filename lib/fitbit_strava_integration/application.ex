@@ -6,6 +6,7 @@ defmodule FitbitStravaIntegration.Application do
   use Application
 
   @impl true
+  @spec start(any(), any()) :: {:error, any()} | {:ok, pid()}
   def start(_type, _args) do
     IO.puts("Starting FitbitStravaIntegration application #{Mix.env()}")
 

@@ -1,22 +1,22 @@
 defmodule FitbitStravaIntegrationWeb.FitbitTokenPlug do
   import Plug.Conn
   alias FitbitStravaIntegration.Fitbit.FitbitOauth
+  require Logger
 
+  @spec init(any()) :: any()
   def init(opts), do: opts
 
+  @spec call(Plug.Conn.t(), any()) :: Plug.Conn.t()
   def call(conn, _opts) do
-    IO.puts("Checking for valid Fitbit token")
+    Logger.info("Checking for valid Fitbit token")
 
     case get_valid_api_token(conn) do
-      {:ok, token} ->
-        IO.puts("Fitbit token is valid #{token}")
-        assign(conn, :fitbit_token, token)
+      {:ok, token, updated_conn} ->
+        Logger.info("Fitbit token is valid")
+        assign(updated_conn, :fitbit_token, token)
 
-      _ ->
-        conn
-        |> put_session(:return_to, conn.request_path)
-        |> Phoenix.Controller.redirect(to: "/api/fitbit/auth")
-        |> halt()
+      {:error, reason} ->
+        handle_error(conn, reason)
     end
   end
 
@@ -33,17 +33,18 @@ defmodule FitbitStravaIntegrationWeb.FitbitTokenPlug do
       conn.cookies["fitbit_token_expires_at"]
 
     cond do
-      is_nil(access_token) ->
-        :error
+      is_nil(access_token) or is_nil(refresh_token) ->
+        {:error, :missing_tokens}
 
       token_expired?(expires_at) ->
         refresh_token(conn, refresh_token)
 
       true ->
-        {:ok, access_token}
+        {:ok, access_token, conn}
     end
   end
 
+  @spec token_expired?(any()) :: boolean()
   def token_expired?(expires_at) do
     case expires_at do
       nil ->
@@ -63,18 +64,42 @@ defmodule FitbitStravaIntegrationWeb.FitbitTokenPlug do
     end
   end
 
+  @spec refresh_token(any(), any()) ::
+          {:error, :refresh_token_failed | :unexpected_error, any()} | {:ok, any(), Plug.Conn.t()}
   def refresh_token(conn, refresh_token) do
-    case FitbitOauth.refresh_token(refresh_token) do
-      {:ok, token} ->
+    try do
+      token = FitbitOauth.refresh_token(refresh_token)
+
+      conn =
         conn
         |> put_resp_cookie("fitbit_token", token.access_token, encrypt: true)
         |> put_resp_cookie("fitbit_refresh_token", token.refresh_token, encrypt: true)
         |> put_resp_cookie("fitbit_token_expires_at", to_string(token.expires_at), encrypt: true)
 
-        {:ok, token.access_token}
+      {:ok, token.access_token, conn}
+    rescue
+      e in OAuth2.Error ->
+        Logger.error("Failed to refresh Fitbit token: #{inspect(e)}")
+        {:error, :refresh_token_failed, conn}
 
-      _ ->
-        :error
+      unexpected ->
+        Logger.error("Unexpected error during Fitbit token refresh: #{inspect(unexpected)}")
+        {:error, :unexpected_error, conn}
     end
   end
+
+  defp handle_error(conn, reason) do
+    log_error(reason)
+
+    conn
+    |> put_session(:return_to, conn.request_path)
+    |> Phoenix.Controller.redirect(to: "/api/fitbit/auth")
+    |> halt()
+  end
+
+  defp log_error(:missing_tokens), do: Logger.error("Missing Fitbit tokens")
+  defp log_error(:refresh_token_failed), do: Logger.error("Failed to refresh Fitbit token")
+
+  defp log_error(reason),
+    do: Logger.error("Fitbit token authentication error: #{inspect(reason)}")
 end

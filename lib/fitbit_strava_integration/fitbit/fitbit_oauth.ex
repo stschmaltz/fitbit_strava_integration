@@ -6,6 +6,7 @@ defmodule FitbitStravaIntegration.Fitbit.FitbitOauth do
   @redirect_uri "http://localhost:4000/api/fitbit/callback"
   @site "https://api.fitbit.com"
 
+  @spec client() :: OAuth2.Client.t()
   def client do
     IO.puts("Creating Fitbit OAuth2 client")
 
@@ -26,6 +27,7 @@ defmodule FitbitStravaIntegration.Fitbit.FitbitOauth do
     |> OAuth2.Client.put_serializer("application/json", Jason)
   end
 
+  @spec authorize_url!(OAuth2.Client.t()) :: binary()
   def authorize_url!(client) do
     IO.puts("Generating Fitbit authorization URL")
 
@@ -35,6 +37,7 @@ defmodule FitbitStravaIntegration.Fitbit.FitbitOauth do
     )
   end
 
+  @spec get_token_from_client(OAuth2.Client.t()) :: OAuth2.Client.t()
   def get_token_from_client(client, params \\ [], headers \\ []) do
     OAuth2.Client.get_token!(client, params, headers)
   end
