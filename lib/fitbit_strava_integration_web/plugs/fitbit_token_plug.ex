@@ -44,7 +44,7 @@ defmodule FitbitStravaIntegrationWeb.FitbitTokenPlug do
     end
   end
 
-  @spec token_expired?(any()) :: boolean()
+  @spec token_expired?(expires_at :: nil | String.t() | any()) :: boolean()
   def token_expired?(expires_at) do
     case expires_at do
       nil ->

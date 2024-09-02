@@ -9,6 +9,7 @@ config :fitbit_strava_integration, FitbitStravaIntegrationWeb.Endpoint,
 
 # In test we don't send emails
 config :fitbit_strava_integration, FitbitStravaIntegration.Mailer, adapter: Swoosh.Adapters.Test
+config :fitbit_strava_integration, :http_client, FitbitStravaIntegration.HTTPClient.MockApiHelper
 
 # Disable swoosh api client as it is only required for production adapters
 config :swoosh, :api_client, false

@@ -1,11 +1,13 @@
-defmodule FitbitStravaIntegration.ApiHelper do
-  use HTTPoison.Base
+defmodule FitbitStravaIntegration.HTTPClient.ApiHelper do
+  @behaviour FitbitStravaIntegration.HTTPClient.Behaviour
 
-  @spec process_request_headers(any(), any()) :: nonempty_maybe_improper_list()
+  @impl FitbitStravaIntegration.HTTPClient.Behaviour
+  @spec process_request_headers(headers :: list(), token :: String.t()) :: list()
   def process_request_headers(headers, token) do
     [{"Authorization", "Bearer #{token}"} | headers]
   end
 
+  @impl FitbitStravaIntegration.HTTPClient.Behaviour
   def get(url, token, headers \\ []) do
     HTTPoison.get(url, process_request_headers(headers, token))
     |> handle_response()

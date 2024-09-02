@@ -55,6 +55,7 @@ defmodule FitbitStravaIntegration.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.5"},
       {:dotenv, "~> 3.0.0", only: [:dev, :test]},
+      {:mox, "~> 1.0", only: :test},
       {:httpoison, "~> 1.8"},
       {:oauth2, "~> 2.0"},
       {:tesla, "~> 1.4"}

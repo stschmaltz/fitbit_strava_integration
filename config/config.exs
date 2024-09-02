@@ -32,6 +32,7 @@ config :fitbit_strava_integration, FitbitStravaIntegrationWeb.Endpoint,
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
 config :fitbit_strava_integration, FitbitStravaIntegration.Mailer, adapter: Swoosh.Adapters.Local
+config :fitbit_strava_integration, :http_client, FitbitStravaIntegration.HTTPClient.ApiHelper
 
 # Configure esbuild (the version is required)
 config :esbuild,
