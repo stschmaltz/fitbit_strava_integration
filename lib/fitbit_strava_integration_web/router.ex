@@ -15,6 +15,8 @@ defmodule FitbitStravaIntegrationWeb.Router do
 
     # Add routes that need Fitbit authentication here
     get "/fitbit/profile", Fitbit.ApiController, :profile
+
+    get "/fitbit/activities", Fitbit.ApiController, :activities
   end
 
   scope "/api", FitbitStravaIntegrationWeb do
