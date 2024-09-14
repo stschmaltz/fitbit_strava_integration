@@ -1,4 +1,3 @@
-
 # Fitbit-Strava Integration
 
 This Elixir Phoenix application integrates Fitbit data with Strava, allowing users to sync their Fitbit workouts to their Strava account.
@@ -19,6 +18,7 @@ This Elixir Phoenix application integrates Fitbit data with Strava, allowing use
 ## Setup
 
 1. Clone the repository:
+
 ```
 
 git clone https://github.com/yourusername/fitbit_strava_integration.git
@@ -27,6 +27,7 @@ cd fitbit_strava_integration
 ```
 
 2. Install dependencies:
+
 ```
 
 mix deps.get
@@ -34,7 +35,8 @@ mix deps.get
 ```
 
 3. Setup environment variables:
-Create a `.env` file in the root directory with the following content:
+   Create a `.env` file in the root directory with the following content:
+
 ```
 
 FITBIT_CLIENT_ID=your_fitbit_client_id
@@ -43,6 +45,7 @@ FITBIT_CLIENT_SECRET=your_fitbit_client_secret
 ```
 
 4. Start the Phoenix server:
+
 ```
 
 mix phx.server
@@ -85,5 +88,7 @@ Permission is hereby granted to view and fork this repository for the purposes o
 Contributors grant Shane Schmaltz a non-exclusive, irrevocable, worldwide, royalty-free license to use, modify, and distribute their contributed work as part of this project.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+```
 
 ```
